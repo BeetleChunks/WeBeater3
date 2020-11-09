@@ -40,7 +40,7 @@ optional arguments:
 #### Enumerate 10.5.1.10 for NTLM authentication
 ```python .\WeBeater3.py -a enum -s 10.5.1.10 -P 80```
 
-#### Check credentials for a ```exchadmin``` in the ```ECORP``` domain
+#### Check credentials for ```exchadmin``` in the ```ECORP``` domain
 ```python .\WeBeater3.py -a brute -s 10.5.1.10 -P 80 -U /rpc/ -d ECORP -u exchadmin -p "Welcome1"```
 
 ## Python Requirements
