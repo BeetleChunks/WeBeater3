@@ -1,0 +1,87 @@
+chilkat = {
+	"api.key": ""
+}
+
+wb3 = {
+	"db": {
+		"host": "",
+		"port": 3306,
+		"user": "",
+		"password": ""
+	}
+}
+
+web = {
+	"ntlm": {
+		"uris": [
+			"/",
+			"/abs/",
+			"/AccessPlatform/",
+			"/AccessPlatform/auth/",
+			"/adfs/ls/auth/integrated/",
+			"/admin/",
+			"/administration/",
+			"/administrator/",
+			"/api/",
+			"/app/",
+			"/asp/",
+			"/aspnet_client/",
+			"/asps/",
+			"/Autodiscover/",
+			"/CertProv/CertProvisioningService.svc",
+			"/certsrv/",
+			"/cgi/",
+			"/citrix/",
+			"/data/",
+			"/ecp/",
+			"/EWS/",
+			"/Exadmin/",
+			"/exchange/",
+			"/ExchWeb/",
+			"/GroupExpansion/Service.svc",
+			"/index.html",
+			"/install/",
+			"/IntraApps/SitePages/Home.aspx",
+			"/isapi/",
+			"/login/",
+			"/mcx",
+			"/Microsoft-Server-ActiveSync/",
+			"/msadc/",
+			"/OAB/",
+			"/OMA/",
+			"/OWA/",
+			"/owa/",
+			"/PowerShell/",
+			"/Reach/Sip.svc",
+			"/RequestHandlerExt",
+			"/RgsClients",
+			"/Rpc/",
+			"/rpc/",
+			"/search/",
+			"/template/",
+			"/test/",
+			"/upload/",
+			"/WebTicket/",
+			"/WebTicket/WebTicketService.svc",
+			"/wp-admin/",
+			"/wp-content/",
+			"/_layouts/15/Authenticate.aspx",
+			"/_vti_bin/owssvr.dll",
+			"/_windows/default.aspx",
+			"/_windows/default.aspx?ReturnUrl=/_layouts/15/Authenticate.aspx?Source=%2F&Source=/"
+		]
+	},
+	"ports": {
+		"ssl.default": True,
+		"ssl.true": [443, 8443],
+		"ssl.false": [80, 8080]
+	}
+}
+
+general = {
+	"debug": {
+		"db": False,
+		"auth": False,
+		"wb3": True
+	}
+}
