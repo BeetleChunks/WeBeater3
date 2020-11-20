@@ -5,6 +5,7 @@ import threading
 import queue
 
 from copy import deepcopy
+from netaddr import IPNetwork
 
 # Local project imports
 from configs import settings
@@ -17,6 +18,7 @@ def get_args_dict():
 		"arg_action": None,
 		"arg_threads": None,
 		"arg_target": None,
+		"arg_target_range": None,
 		"arg_targets_file": None,
 		"arg_port": None,
 		"arg_uri": None,
@@ -44,6 +46,9 @@ def get_args_dict():
 	# Host specific parameters
 	parser.add_argument('-s', action="store", dest="arg_target", default=None,
 		help="Target server")
+
+	parser.add_argument('-sR', action="store", dest="arg_target_range", default=None,
+		help="Target network CIDR range")
 	
 	parser.add_argument('-sL', action="store", dest="arg_targets_file", default=None,
 		help="Line delimited list of target servers.")
@@ -102,6 +107,7 @@ def get_args_dict():
 	args_dict["arg_action"]        = args.arg_action
 	args_dict["arg_threads"]       = args.arg_threads
 	args_dict["arg_target"]        = args.arg_target
+	args_dict["arg_target_range"]  = args.arg_target_range
 	args_dict["arg_targets_file"]  = args.arg_targets_file
 	args_dict["arg_port"]          = args.arg_port
 	args_dict["arg_uri"]           = args.arg_uri
@@ -125,6 +131,10 @@ def get_target_list(args_dict):
 
 	if args_dict["arg_target"] != None:
 		target_list.append(args_dict["arg_target"].lower())
+
+	if args_dict["arg_target_range"] != None:
+		for ip in IPNetwork(args_dict["arg_target_range"]):
+			target_list.append(f"{ip}")
 
 	if args_dict["arg_targets_file"] != None:
 		with open(args_dict["arg_targets_file"], "r", encoding="utf-8") as hTargets:
