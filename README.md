@@ -21,6 +21,7 @@ optional arguments:
   -a  {brute,enum}      [REQUIRED] Action to carry out
   -t  THREADS           Number of worker threads
   -s  TARGET            Target server
+  -sR TARGET_RANGE      Target network CIDR range
   -sL TARGETS_FILE      Line delimited list of target servers.
   -P  PORT              Target port
   -U  URI               Target URI (Default uses internal list for enumeration)
@@ -48,6 +49,7 @@ During development Python 3.8 was used.
 
 * chilkat2 (https://www.chilkatsoft.com/chilkat2-python.asp)
 * pymysql
+* netaddr
 
 ## SQL Requirements
 During development MySQL was used. I have made it very simple to get up and running. All you need to do is install MySQL and start it up. During installation take note of the user and password you create. If you configure it to run on the non-standard port of ```3306``` then also take note of the port. You can install the MySQL database on your localhost or a remote server, either option is supported, just make sure that if you install it on a remote server that the database port is accessible from wherever you plan to run WeBeater3.
