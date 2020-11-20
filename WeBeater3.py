@@ -1,12 +1,16 @@
 import os
 import chilkat2
 import argparse
+import threading
+import queue
 
 from copy import deepcopy
 
 # Local project imports
 from configs import settings
 from modules import wb3
+
+from modules.threadfort import ThreadFort
 
 def get_args_dict():
 	args_dict = {
@@ -158,7 +162,7 @@ def get_uri_list(args_dict):
 		return uri_list[::]
 
 	else:
-		return None
+		return list(set(settings.web["ntlm"]["uris"]))
 
 def generate_hosts(targets, port, ssl):
 	template = {
@@ -241,6 +245,9 @@ def get_auth_host(args_dict):
 		"uri": args_dict["arg_uri"]
 	}
 
+	if auth_host["uri"] == None:
+		auth_host["uri"] = "/"
+
 	if args_dict["ssl"] != None:
 		auth_host["ssl"] = args_dict["ssl"]
 	
@@ -285,9 +292,10 @@ def generate_from_userpass(user_pass, domain):
 
 def main():
 	args_dict = get_args_dict()
+	tfort     = ThreadFort()
 
 	if args_dict["arg_action"] == "brute":
-		cred_list = []
+		cred_q = queue.Queue()
 
 		if args_dict["arg_userpass_file"] == None:
 			users     = get_user_list(args_dict)
@@ -296,7 +304,7 @@ def main():
 			auth_host = get_auth_host(args_dict)
 
 			for cred_dict in generate_from_users(users, password, domain):
-				cred_list.append(cred_dict)
+				cred_q.put(cred_dict)
 
 		else:
 			user_pass = get_userpass_list(args_dict)
@@ -304,23 +312,38 @@ def main():
 			auth_host = get_auth_host(args_dict)
 
 			for cred_dict in generate_from_userpass(user_pass, domain):
-				cred_list.append(cred_dict)
+				cred_q.put(cred_dict)
 
-		wb3.web_ntlm_brute(auth_host, cred_list)
+		for i in range(0, args_dict["arg_threads"]):
+			t = threading.Thread(target=wb3.web_ntlm_brute, args=(tfort, auth_host, cred_q))
+			t.start()
+			tfort.threads.append(t)
 
 	elif args_dict["arg_action"] == "enum":
+		host_q  = queue.Queue()
+		
 		targets = get_target_list(args_dict)
 		uris    = get_uri_list(args_dict)
 		port    = args_dict["arg_port"]
 		ssl     = args_dict["ssl"]
 
 		for host_dict in generate_hosts(targets, port, ssl):
-			print(f"Trying {host_dict['host']}...")
-			wb3.web_ntlm_enum(host_dict, uris=uris)
+			host_q.put(host_dict)
+		
+		for i in range(0, args_dict["arg_threads"]):
+			t = threading.Thread(target=wb3.web_ntlm_enum, args=(tfort, host_q, uris))
+			t.start()
+			tfort.threads.append(t)
 
 	else:
-		print(f"[!] Invalid action argument recieved.")
+		tfort.tprint(f"[!] Invalid action argument recieved.")
 		os._exit(1)
+
+	# Wait for action threads to finish
+	while len(tfort.threads) > 0:
+		for t in tfort.threads:
+			if not t.is_alive():
+				tfort.threads.remove(t)
 
 if __name__ == '__main__':
 	# Unlock chilkat globally
