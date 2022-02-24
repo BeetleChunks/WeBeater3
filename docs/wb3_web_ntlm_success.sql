@@ -3,5 +3,5 @@ FROM
 	wb3.web_ntlm_login
 WHERE
 	(wb3.web_ntlm_login.pre_status_code != wb3.web_ntlm_login.post_status_code)
-    OR
+	OR
 	(wb3.web_ntlm_login.post_status_code != 401)

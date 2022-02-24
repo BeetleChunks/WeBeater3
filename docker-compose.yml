@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  wb3-mysql:
+    image: mysql
+    container_name: ${WB3_MYSQL_NAME}
+    hostname: ${WB3_MYSQL_NAME}
+    networks:
+      - wb3
+    environment:
+      - MYSQL_ROOT_PASSWORD=${WB3_MYSQL_ROOT_PWD}
+      - MYSQL_USER=${WB3_MYSQL_USER}
+      - MYSQL_PASSWORD=${WB3_MYSQL_USER_PWD}
+      - MYSQL_DATABASE=${WB3_MYSQL_DATABASE}
+
+  wb3-phpmyadmin:
+    image: phpmyadmin
+    container_name: ${WB3_PHPMYADMIN_NAME}
+    hostname: ${WB3_PHPMYADMIN_NAME}
+    networks:
+      - wb3
+    ports:
+      - 18080:80
+    depends_on:
+      - ${WB3_MYSQL_NAME}
+    environment:
+      - PMA_HOST=${WB3_MYSQL_NAME}
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+
+  wb3-client:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ${WB3_CLIENT_NAME}
+    hostname: ${WB3_CLIENT_NAME}
+    networks:
+      - wb3
+    depends_on:
+        - ${WB3_MYSQL_NAME}
+    tty: true
+    stdin_open: true
+
+networks:
+  wb3:
+    driver: bridge

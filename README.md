@@ -9,6 +9,12 @@ There are three main functions of this tool:
 
 All web requests and authentication attempts are stored in a SQL database. Within the ```docs``` directory are several example SQL queries to get results and useful information, such as, successful NTLM authentication and overviews of the web applications scanned. There is also a ```ui``` directory, which contains REALLY crappy PHP code to display information from the SQL database. I am a terrible UI developer and really just added that to mess around with.
 
+## Docker
+```
+docker compose --env-file=.env up -d --build
+docker exec -it wb3-client-01 /bin/bash
+```
+
 ## Usage
 ```
 usage: WeBeater3.py [-h] -a {brute,enum} [-t THREADS] [-s TARGET] [-sL TARGETS_FILE] [-P PORT]

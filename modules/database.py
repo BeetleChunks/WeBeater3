@@ -136,7 +136,9 @@ class WeB3Db:
 
 			status = True
 
-		except:
+		except Exception as e:
+			if self.debug == True:
+				print(f"[DEBUG] {str(e)}")
 			status = False
 
 		if status == True:
