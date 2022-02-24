@@ -58,12 +58,26 @@ During development Python 3.8 was used.
 * netaddr
 
 ## SQL Requirements
-During development MySQL was used. I have made it very simple to get up and running. All you need to do is install MySQL and start it up. During installation take note of the user and password you create. If you configure it to run on the non-standard port of ```3306``` then also take note of the port. You can install the MySQL database on your localhost or a remote server, either option is supported, just make sure that if you install it on a remote server that the database port is accessible from wherever you plan to run WeBeater3.
+The SQL database is deployed via docker as well as a phpmyadmin container. You can access the web interface on port 18080 by default. This should be the only port exposed outside of the Docker network, but it does not use SSL. It is expected that the end user will configure this post installation.
 
 ## WeBeater3 Configuration
 There is a single configuration file for WeBeater3, located at ```configs/settings.py.dist```. After you download or clone this repository, create a copy of this file and remove the ```.dist``` extention, so you are left with ```configs/settings.py```. Open this file and configure it with your Chilkat API key and the MySQL database parameters. If you do not already have a Chilkat API key, there is a 30day trial key you can use (https://www.chilkatsoft.com/TrialInfo.asp).
 
 As this file contains your Chilkat API key and MySQL database credentials, the configuration template is distributed with the ```.dist``` extention to limit the possiblilty of sensitive information being pushed to Github as ```.gitignore``` is configured to exclude ```configs/settings.py```.
+
+There is also a ```.env.dist``` file that contains configuration information for the Docker deployment. You should copy this file to ```.env``` and update the passwords for the user and root account. The default settings are shown below:
+
+```
+WB3_MYSQL_NAME="wb3-mysql-01"
+WB3_MYSQL_DATABASE="wb3"
+WB3_MYSQL_USER="wb3user"
+WB3_MYSQL_USER_PWD="CHANGEME!!!!!!!!!!!!"
+WB3_MYSQL_ROOT_PWD="CHANGEME!!!!!!!!!!!!"
+
+WB3_PHPMYADMIN_NAME="wb3-phpmyadmin"
+
+WB3_CLIENT_NAME="wb3-client-01"
+```
 
 ## Disclaimer
 This code has been created for academic research and is not intended to be used against systems except where explicitly authorized. The code is provided as is with no guarentees or promises on its execution. I am not responsible or liable for misuse of this code.
