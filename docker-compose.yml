@@ -21,7 +21,7 @@ services:
     ports:
       - 18080:80
     depends_on:
-      - ${WB3_MYSQL_NAME}
+      - wb3-mysql
     environment:
       - PMA_HOST=${WB3_MYSQL_NAME}
       - PMA_PORT=3306
@@ -36,7 +36,7 @@ services:
     networks:
       - wb3
     depends_on:
-        - ${WB3_MYSQL_NAME}
+        - wb3-mysql
     tty: true
     stdin_open: true
 
